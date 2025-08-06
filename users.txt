@@ -1,0 +1,110 @@
+{
+
+
+  //LES VARIABLES QUI UNE FOIS CHANGEE CAUSENT UN CHANGEMENT
+  const [selectedUser,setSelectedUser]= useState(null);
+  const [usersList, setUsersList ] = useState([]); //cest un tableau
+  const [newUser, SetNewUser] = useState(false);
+  const [token, setToken] = useState(null);
+
+  const [flagFetchUsers,setflagFetchUsers]= useState(false);
+
+  //LE USEEFFECT QUI VA CALL DES ROUTES EN BACKEND POUR OBTENIR QQCH
+  useEffect(()=>{
+
+    if(newUser){
+      fetch("http://localhost:4467/users",{
+      method:'POST',
+      headers:{'Content-type': 'application/json'},
+      body: JSON.stringify(newUser)
+    })
+    .then(()=>SetNewUser(false));
+    }
+    else if(selectedUser){
+      fetch('http://localhost:4467/users/'+selectedUser, {method: 'GET'}) //en backend on prend la route de getUser 
+      .then(res => res.json()) //le return du api on mets ca en json
+      .then(res =>setSelectedUser(res) //on update l'etat du state avec le user récupéré
+      )
+    }
+    else if (flagFetchUsers){
+      fetch('http://localhost:4467/users', {method: 'GET'})
+      .then(res => res.json())//repond par tout ce quon get en db
+      .then(list =>{
+        setUsersList(list);
+        setflagFetchUsers(false);
+      })
+    }
+    else if(token){
+      fetch('http://localhost:4467/users', 
+      { 
+        method: 'GET',
+        headers: {
+          'authorization': token
+        } 
+      })
+        .then(rep => {
+          if (!rep.ok) throw new Error("token invalide");
+          return rep.json();
+        })
+        .then(rep=> {
+          setUsersList(rep);
+        })
+        .catch(err => {
+          console.error("Erreur auth:", err.message); 
+        });
+    }
+  },[newUser, flagFetchUsers, selectedUser,token]); //useEffect dependencies arche seuelement en fct de celles ci
+
+
+    //LES EVENTS HANDLERS
+    function handleGetOneUser(i){
+      setSelectedUser(i);
+    }
+    function handleGetAllUsers(i){
+      setflagFetchUsers(true);
+    }
+
+    function handleLogout() {
+      localStorage.removeItem("jwt-token");
+      setToken(null);
+    }
+
+    //AFFICHAGE FINAL
+
+
+  //Si on a pas de token de connexion on affiche le form  
+  if (!token){
+    return (
+      <FormAuth modToken={setToken}/>
+    )
+  }
+
+  else{
+    return(
+      <>
+      
+      <p>connecté</p>
+      <button onClick={handleLogout}>logout</button>
+
+      {usersList.length>0 ? (
+        
+        <>
+        <div>
+          <table>
+            <tbody>
+            {usersList.length>0 && usersList.map(user => ( 
+                <Profile key={user._id} id={user._id} name={user.name} email={user.email}/>
+                ))
+            } 
+            </tbody>
+          </table>
+        </div>
+        </>
+      ): (
+      <button onClick={handleGetAllUsers}>get all users</button>
+      )}
+      
+      </>
+    )
+  }
+}

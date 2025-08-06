@@ -1,0 +1,64 @@
+import { useState,useEffect } from 'react';
+import FormAuth from "./components/FormAuth";
+
+import Profile from "./components/Profile"
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
+
+function App() {
+
+  const [token, setToken] = useState(localStorage.getItem("jwt-token")); //on get le token du local storage(ou pas sil y en a pas)
+  
+  const [showProfile, setShowProfile] = useState(null);
+  const [loggedUserInfo, setLoggedUserInfo] = useState({name: "", email: "", _id: ""});
+
+  useEffect(() => {
+    if (token) { //if token existe in localstorage
+      fetch("http://localhost:4467/users ", { //we fetch api route to get a user info WITH AUTH
+        method: "GET",
+        headers: {
+          'Content-type': 'application/json',   
+          'Authorization': `Bearer ${token}` //OMFG THIS TOOK SOOOO LONG TO DEBUG FFS
+        }
+      })
+      .then(async serveurResponse => {
+        if (!serveurResponse.ok) throw new Error("Erreur lors de la connexion");
+        return serveurResponse.json();
+      })
+      .then(readableServeurResponse => {
+        setLoggedUserInfo(readableServeurResponse); //we get the user info from the json we can read
+        setShowProfile(true); //since we are logged in, we then set the var show profile to true so we can show the profile
+      })
+      .catch(() => {
+        setShowProfile(false); 
+        setLoggedUserInfo({name: "", email: "", _id: ""}); 
+      });
+    } else {
+      setShowProfile(false); //si pas de token on ne montre pas le profile
+      setLoggedUserInfo({name: "", email: "", _id: ""}); //on remet les infos du user a vide
+    }
+  }, [token]); //on relance l'effet si le token change  
+
+//////////////////
+  
+  if(token){
+    if(showProfile){
+      return(
+        <Profile key={loggedUserInfo._id} id={loggedUserInfo._id} name={loggedUserInfo.name} email={loggedUserInfo.email}/>
+      )
+    }
+  }
+  else{
+    return(
+      <FormAuth onLoginSuccess={setToken} />
+    )
+  }
+
+  }
+
+
+export default App
+
+
