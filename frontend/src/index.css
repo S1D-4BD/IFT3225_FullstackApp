@@ -64,7 +64,7 @@ button:focus-visible {
 }
 
 
-/* trucs a nous*/
+/* trucs a nous pk faire un 2iem css c inutile*/
 
 .container{
   height: 100vh;
@@ -130,6 +130,7 @@ button:focus-visible {
 }
 
 
+
 .background-vague{
   z-index:-20;
   position:absolute;
@@ -141,6 +142,11 @@ button:focus-visible {
   top:50%;
   left:50%;
   transform:translate(-50%,-50%)
+}
+.center-margin{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
 }
 
 .center-div button:hover{
@@ -233,6 +239,11 @@ table, th, td {
   color: grey;
 }
 
+
+.documentation{
+  text-align:left;
+  align-items: left;
+}
 
 @media (prefers-color-scheme: light) {
   :root {

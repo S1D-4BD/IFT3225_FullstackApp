@@ -26,6 +26,7 @@ export function Login() {
             }
         }
         else {
+            alert("Erreur! Mauvais email ou MDP, sinon imscrit-toi");
             console.error("Login failed");
         }
 
@@ -43,6 +44,7 @@ export function Login() {
                         <label>Password</label>
                         <input type="password" value={userCredentials.password} onChange={(e)=> setUserCredentials({...userCredentials, password:e.target.value}) }/>
                         <button type="submit">Login</button>
+                        <a href="/">back to landing</a>
                     </div>
                 </div>
             </form>

@@ -7,6 +7,9 @@ import {Home} from './pages/Home';
 import {UserEdit} from './pages/UserEdit';
 import {ErrorPage} from './pages/ErrorPage';
 import {CreateUser} from './pages/CreateUser';
+import { AdminEditUser } from "./pages/AdminEditUser";
+import {Documentation} from './pages/Documentation'
+
 
 
 import reactLogo from './assets/react.svg'
@@ -20,12 +23,16 @@ function App() {
       <Routes>
           {/* LIBRE ACCESS */}
           <Route path="/" element={<Landing />} />
+          <Route path="/documentation" element={<Documentation />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/signin" element={<SignIn />} />
           {/* IF LOGGED IN*/}
           <Route path="/home" element={<Home />} />
           <Route path="/edit/:id" element={<UserEdit />} />
           <Route path="/create" element={<CreateUser />} />
+          <Route path="/editadmin/:id" element={<AdminEditUser />} />
+
           {/* IF BAD ANYWAYS */}
           <Route path="*" element={<ErrorPage />} />
       </Routes>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+/* import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function UserDelete() {
@@ -11,7 +11,7 @@ export function UserDelete() {
         e.preventDefault();
 
         try {
-        // Étape 1 : Récupérer tous les users pour trouver l'id
+        //
         const res = await fetch('http://localhost:4467/users', {
             headers: { Authorization: `Bearer ${token}` },
         });
@@ -24,7 +24,7 @@ export function UserDelete() {
             return;
         }
 
-        // Étape 2 : Supprimer via son ID
+///////////////////////////////////3
         const deleteRes = await fetch(`http://localhost:4467/users/${user._id}`, {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${token}` },
@@ -60,3 +60,4 @@ export function UserDelete() {
         </div>
     );
 }
+ */

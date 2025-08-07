@@ -17,6 +17,9 @@ export function Landing(){
                 <Link to="/signin">
                     <button> Register </button>
                 </Link>
+                <Link to="/documentation">
+                    <button> docs </button>
+                </Link>
         </div>
         <WavesSvg />
         </>

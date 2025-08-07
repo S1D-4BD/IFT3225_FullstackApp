@@ -15,7 +15,7 @@ const Navbar = ({ user }) => {
 
         <div className="navbar-right">
           <ul className="nav-links">
-            <li>
+            {/* <li>
               <a
                 href="#"
                 onClick={(e) => {
@@ -25,7 +25,7 @@ const Navbar = ({ user }) => {
               >
                 Edit account
               </a>
-            </li>
+            </li> */}
 
             {user.role === "admin" && ( //VERY IMPORTANT --> CAN ONLY CREATE ADMINS AS AN ADMIN, NOT == REGISTER
               <li>

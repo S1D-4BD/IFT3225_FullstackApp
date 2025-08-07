@@ -2,7 +2,7 @@
 const express= require("express");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
-const jwt = require('jsonwebtoken'); ///IMPORTANT
+const jwt = require('jsonwebtoken'); ///IMPORTANT SINON FUCK UPS
 require("dotenv").config();
 
 //on va décrire toutes les actions quon peut faire a un user
@@ -81,7 +81,7 @@ exports.signup = async (req, res) => {
         res.status(201).json({ success: true, token, userId: newUser._id });
     } catch (err) {
         console.error("Erreur dans signup :", err);
-        res.status(500).json({ success: false, message: "Erreur serveur" });
+        res.status(500).json({ success: false, message: "Erreur servur" });
     }
 };
 
@@ -94,41 +94,10 @@ exports.getConnectedUser = async (req, res) => {
         }
         res.status(200).json(user);
     } catch (err) {
-        res.status(500).json({ message: "Erreur serveur" });
+        res.status(500).json({ message: "Erreur servur" });
     }
 };
 
-//LOGIN
-/* exports.login = async (req,res,next)=>{
-
-    const {email,password} = req.body;
-
-    if (!email || !password){
-        return res.status(400).json({message:"incomplete"})
-    }
-
-    const user = await User.findOne({email: email}); //exactement COMME MONGO
-    if(!user){
-        return res.status(401).json({message:"incorrect"})
-    }else{
-        const valid = await bcrypt.compare(password, user.password)
-
-            if (!valid) {
-                return res.status(401).json({ message: 'Paire login/mot de passe incorrecte' });
-            }
-            return res.status(200).json({
-                success: true,
-                userId: user._id,
-                token: jwt.sign( //ICI ON CREE TOKEN
-                    {userId: user._id, role: user.role}, //on envoie l'id et le role
-                    'PHRASE_ALEATOIRE_TRES_LONGUE',
-                    { expiresIn: '24h' }
-                )
-            });
-
-    }
-}
- */
 
 exports.login = async (req, res, next) => {
     const { email, password } = req.body;
@@ -151,7 +120,7 @@ exports.login = async (req, res, next) => {
             userId: user._id,
             token: jwt.sign(
                 { userId: user._id, role: user.role },
-                'PHRASE_ALEATOIRE_TRES_LONGUE',  // ← Changé ici
+                'PHRASE_ALEATOIRE_TRES_LONGUE',
                 { expiresIn: '24h' }
             )
         });
@@ -169,7 +138,7 @@ exports.signin = async (req,res,next)=>{
         if (registered){
             return res.status(409).json({message: "user already cree"});
         }
-    //si pas inscrit
+    //si T pas inscrit
 
     const hashedPassword = await bcrypt.hash(password,12);
     await new User({name, email, password:hashedPassword}).save();
@@ -178,7 +147,7 @@ exports.signin = async (req,res,next)=>{
 }
 
 //PUT info IN USER
-exports.updateUser = async (req, res) => {
+/* exports.updateUser = async (req, res) => {
     const requester = req.user;
     const targetId = req.params.id;
 
@@ -199,11 +168,48 @@ exports.updateUser = async (req, res) => {
 
     const user = await User.findByIdAndUpdate(targetId, modifications, { new: true }).select("-password");
     if (!user) {
-        return res.status(400).json({ message: "Utilisateur non trouvé" });
+        return res.status(400).json({ message: "Utilisateur non trouvE" });
     }
 
     res.json(user);
+}; */
+ //prendre lui en bas sinon erreur d envoi modif de role
+
+
+exports.updateUser = async (req, res) => {
+    const userId = req.params.id;
+    const updates = req.body;
+
+    const allowedUpdates = ["name", "email", "password", "role"];
+    const filteredUpdates = {};
+
+    for (const field of allowedUpdates) {
+        if (updates[field] !== undefined) {
+            // Si c'est le champ password, on le hash
+            if (field === "password") {
+                try {
+                    const hashedPassword = await bcrypt.hash(updates.password, 10);
+                    filteredUpdates.password = hashedPassword;
+                } catch (hashError) {
+                    console.error("Erreur de hash du mot de passe :", hashError);
+                    return res.status(500).json({ message: "Erreur de hash du mot de passe" });
+                }
+            } else {
+                filteredUpdates[field] = updates[field];
+            }
+        }
+    }
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(userId, filteredUpdates, { new: true });
+        res.json(updatedUser);
+    } catch (error) {
+        console.error("Erreur de mise à jour :", error);
+        res.status(500).json({ message: "Erreur lors de la mise à jour" });
+    }
 };
+
+
 
 
 exports.createUser = async (req, res) => {
@@ -211,12 +217,12 @@ exports.createUser = async (req, res) => {
         const { name, email, password, role } = req.body;
 
         if (!["admin", "user"].includes(role)) {
-        return res.status(400).json({ message: "Rôle invalide" });
+        return res.status(400).json({ message: "Role invalide" });
         }
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-        return res.status(400).json({ message: "Utilisateur déjà existant" });
+        return res.status(400).json({ message: "Utilisateur déjà la" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -229,7 +235,7 @@ exports.createUser = async (req, res) => {
 
         await newUser.save();
 
-        res.status(201).json({ message: "Utilisateur créé avec succès", user: newUser });
+        res.status(201).json({ message: "Utilisateur créé avec success", user: newUser });
     } catch (err) {
         res.status(500).json({ message: "Erreur serveur", error: err.message });
     }
@@ -276,12 +282,11 @@ exports.getUser = async (req,res)=>{
 
 exports.deleteConnectedUser = async (req, res) => {
     try {
-        // ✅ Utiliser req.user.userId au lieu de req.auth.userId
         const deleted = await User.findByIdAndDelete(req.user.userId);
         if (!deleted) {
             return res.status(404).json({ message: "Utilisateur non trouvé" });
         }
-        res.json({ message: "Votre compte a été supprimé." });
+        res.json({ message: "A bientot, quitté avec success" });
     } catch (err) {
         res.status(500).json({ message: "Erreur serveur" });
     }

@@ -1,14 +1,14 @@
 import React from 'react';
 
 export default function LineSvg() {
-  let id=0;
+  let id=0; //faut un id pr chaque use en svg
   const generergrille = () => {
     const dots = [];
     for (let x = -300; x <= 2000; x += 60) {
       for (let y = -200; y <= 1000; y += 60) {
         id+=1;
         dots.push(
-          <use key={id} href="#point" transform={`translate(${x},${y})`} /> //WEIRD KEY, mais sinon pas unique
+          <use key={id} href="#point" transform={`translate(${x},${y})`} /> //WEIRD KEY jss, mais sinon pas unique
         );
       }
     }

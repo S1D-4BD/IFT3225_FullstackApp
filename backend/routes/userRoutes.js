@@ -10,6 +10,7 @@ const admin =require("../middlewares/admin");
 // ROUTE SI PAS TOKEN
 //thing with email
 router.get("/generate-password/:length", userController.genererMDP);
+
 router.post("/verify-email", userController.verifyEmail);
 router.post("/signup", userController.signup);
 

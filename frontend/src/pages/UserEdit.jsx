@@ -43,6 +43,7 @@ export function UserEdit() {
 
         <div className='center-div'>
             <form className="formmodal" onSubmit={handleUpdate}>
+
                 <div className="formelements"> <label>Name</label>
                     <input type="text" value={modifications.name} onChange={(e) => setModifications({ ...modifications, name: e.target.value })} />
                     <label>Email</label>
@@ -51,6 +52,8 @@ export function UserEdit() {
                     <input type="password" value={modifications.password} onChange={(e) => setModifications({ ...modifications, password: e.target.value })} />
                     <button type="submit">Update User</button>
                 </div>
+
+
             </form>
         </div>
 

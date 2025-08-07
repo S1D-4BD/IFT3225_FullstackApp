@@ -52,6 +52,7 @@ export async function validationEmail(email) {
     }
 }
 
+//wllh nik
 export async function signup(userData) {
     try {
         const response = await fetch(`${URL}/users/signup`, {
@@ -67,10 +68,10 @@ export async function signup(userData) {
         }
 
         const data = await response.json();
-        console.log("Réponse signup:", data); // Pour débugger
+        console.log("Réponse signup:", data); // Pour debugger
 
 
-        return data; // { success: true, token, userId }
+        return data; //
     } catch (err) {
         console.error("Erreur dans signup() :", err);
         return null;
