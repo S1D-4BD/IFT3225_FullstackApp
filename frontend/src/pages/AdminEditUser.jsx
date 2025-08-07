@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { updateUser } from '../api';
+import { updateUser, BASE_URL } from '../api';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function AdminEditUser() {
@@ -15,7 +15,7 @@ export function AdminEditUser() {
     const token = localStorage.getItem("jwt-token");
 
     useEffect(() => {
-        fetch(`http://localhost:4467/users/${id}`, {
+        fetch(`${BASE_URL}/users/${id}`, {
             headers: { "Authorization": `Bearer ${token}` }
         })
         .then(res => res.json())
@@ -27,17 +27,17 @@ export function AdminEditUser() {
                 role: data.role || "user"
             });
         });
-    }, [id]);
+    }, [id, token]);
 
     async function handleUpdate(e) {
         e.preventDefault();
         try {
             const response = await updateUser(id, modifications, token);
             if (response.ok) {
-                alert("Utilisateur misa jour");
+                alert("Utilisateur mis à jour");
                 navigate('/home');
             } else {
-                alert("Erreur de mise jour");
+                alert("Erreur de mise à jour");
             }
         } catch (err) {
             console.error("Erreur serveur :", err);

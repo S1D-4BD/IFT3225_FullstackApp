@@ -4,7 +4,9 @@ import CircleSvg from '../components/CircleSvg';
 import WavesSvg from "../components/WavesSvg";
 import { Link } from 'react-router-dom';
 import LineSvg from '../components/LineSvg';
+
 export function Landing(){
+
     return(
         <>
         <LineSvg />

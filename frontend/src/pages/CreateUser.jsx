@@ -1,11 +1,11 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api";
 
 export function CreateUser() {
     const [form, setForm] = useState({ name: "", email: "", password: "", role: "user" });
     const [authorized, setAuthorized] = useState(false);
-    const [checking, setChecking] = useState(true); // empêche l’affichage
+    const [checking, setChecking] = useState(true);
     const navigate = useNavigate();
     const token = localStorage.getItem("jwt-token");
 
@@ -17,7 +17,7 @@ export function CreateUser() {
             }
 
             try {
-                const res = await fetch("http://localhost:4467/users/me", {
+                const res = await fetch(`${BASE_URL}/users/me`, {
                     method: "GET",
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -38,7 +38,7 @@ export function CreateUser() {
             } catch (err) {
                 navigate("/login");
             } finally {
-                setChecking(false); // on a fini la vérif
+                setChecking(false);
             }
         };
 
@@ -52,7 +52,7 @@ export function CreateUser() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch("http://localhost:4467/users", {
+            const res = await fetch(`${BASE_URL}/users`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -69,7 +69,6 @@ export function CreateUser() {
         }
     };
 
-    // 🔐 Empêche tout affichage pendant la vérification
     if (checking || !authorized) return null;
 
     return (
