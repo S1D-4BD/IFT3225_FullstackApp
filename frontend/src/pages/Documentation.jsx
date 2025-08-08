@@ -1,3 +1,4 @@
+import { BASE_URL } from "../api";
 import React from 'react';
 
 export function Documentation() {
@@ -5,7 +6,7 @@ export function Documentation() {
         <div className="profile-table">
             <h1>API Documentation</h1>
 
-            <h2>Base URL: <a href="http://localhost:4467">http://localhost:4467</a></h2>
+            <h2>Base URL: <a href="${BASE_URL}">${BASE_URL}</a></h2>
 
             <p><strong>Authentification:</strong> <code>Authorization: Bearer TOKEN</code></p>
             <a href="/">back to landing</a>

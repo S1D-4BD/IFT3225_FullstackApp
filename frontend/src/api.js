@@ -1,5 +1,5 @@
 // src/api.js
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4467";
+const BASE_URL = import.meta.env.VITE_API_URL || "${BASE_URL}";
 
 // ON IMPLEMENTE LE CRUD
 // ICI SONT TOUTES NOS FCT QUI FETCH LE BACK END PR PAS POLLUER LE CODE

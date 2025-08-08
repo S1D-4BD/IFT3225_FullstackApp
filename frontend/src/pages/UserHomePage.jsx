@@ -1,3 +1,5 @@
+import { BASE_URL } from "../api";
+
 /* import React from "react";
 
 export function UserHomePage({ user, navigate }) {
@@ -57,7 +59,7 @@ export function UserHomePage({ user, navigate }) {
     if (confirm("Confirmer la suppression de votre compte ?")) {
       const token = localStorage.getItem("jwt-token");
 
-      fetch("http://localhost:4467/users/me", {
+      fetch("${BASE_URL}/users/me", {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

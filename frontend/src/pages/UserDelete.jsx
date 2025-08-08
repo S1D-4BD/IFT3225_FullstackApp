@@ -1,3 +1,5 @@
+import { BASE_URL } from "../api";
+
 /* import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +14,7 @@ export function UserDelete() {
 
         try {
         //
-        const res = await fetch('http://localhost:4467/users', {
+        const res = await fetch('${BASE_URL}/users', {
             headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -25,7 +27,7 @@ export function UserDelete() {
         }
 
 ///////////////////////////////////3
-        const deleteRes = await fetch(`http://localhost:4467/users/${user._id}`, {
+        const deleteRes = await fetch(`${BASE_URL}/users/${user._id}`, {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${token}` },
         });
